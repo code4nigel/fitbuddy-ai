@@ -3,41 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Workout Plan - FitBuddy</title>
+    <title>Your Workout Plan | FitBuddy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        .plan-box { background-color: #f4f4f9; padding: 20px; border-radius: 8px; white-space: pre-wrap; border: 1px solid #ddd; }
-        .tip-box { background-color: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 5px solid #2196F3;}
-        .feedback-box { background-color: #fff3e0; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #ffe0b2;}
-        textarea { width: 100%; padding: 10px; margin-top: 10px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        button:hover { background-color: #45a049; }
-        a { display: inline-block; margin-top: 20px; text-decoration: none; color: #2196F3; font-weight: bold; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 { color: #ff5722; text-align: center; }
+        h3 { color: #ffffff; margin-bottom: 10px; }
+
+        /* 🔥 NEW: User Info Banner styling */
+        .user-info {
+            background: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            border: 1px solid #444;
+            color: #bbb;
+            font-size: 0.95em;
+        }
+        .user-info strong { color: #fff; }
+
+        .plan-box, .tip-box, .feedback-box {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .plan-box {
+            white-space: pre-wrap;
+            line-height: 1.7;
+            border-left: 4px solid #ff5722;
+        }
+
+        .tip-box {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .feedback-box { border: 1px solid #444; }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        textarea:focus { outline: none; border-color: #ff5722; }
+
+        button {
+            background-color: #ff5722;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #e64a19; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #ff5722;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <h1>Your 7-Day Workout Plan 💪</h1>
+    <div class="container">
+        <h1>Your Personalized Plan ⚡</h1>
 
-    <div class="plan-box">{{ plan }}</div>
+        <!-- 🔥 NEW: Binding the user data variables to the template -->
+        <div class="user-info">
+            <span>Client: <strong>{{ username }}</strong></span>
+            <span>Goal: <strong>{{ goal|title }}</strong></span>
+            <span>Intensity: <strong>{{ intensity|title }}</strong></span>
+        </div>
 
-    <div class="tip-box">
-        <h3>💡 Daily Nutrition Tip:</h3>
-        <p>{{ nutrition_tip }}</p>
+        <!-- 🔥 UPDATED: Using workout_plan instead of plan -->
+        <div class="plan-box">{{ workout_plan }}</div>
+
+        <div class="tip-box">
+            <h3>💡 AI Nutrition & Recovery Tip</h3>
+            <p>{{ nutrition_tip }}</p>
+        </div>
+
+        <div class="feedback-box">
+            <h3>🔄 Refine Your Plan</h3>
+            <p style="font-size: 0.9em; color: #bbb;">Need adjustments? Tell the AI what to change.</p>
+            <form action="/submit-feedback" method="post">
+                <input type="hidden" name="plan_id" value="{{ plan_id }}">
+                <textarea name="feedback" rows="3" placeholder="Enter your feedback here..." required></textarea>
+                <button type="submit">Update Workout Plan</button>
+            </form>
+        </div>
+
+        <a href="/" class="back-link">← Generate a New Plan</a>
     </div>
-
-    <div class="feedback-box">
-        <h3>🔄 Refine Your Plan</h3>
-        <p>Is this plan too hard? Too easy? Need to avoid a knee injury? Tell the AI to adjust it!</p>
-        <!-- Action updated to /submit-feedback -->
-        <form action="/submit-feedback" method="post">
-            <input type="hidden" name="plan_id" value="{{ plan_id }}">
-            <textarea name="feedback" rows="3" placeholder="e.g., Make it easier, I only have 20 minutes a day..."></textarea>
-            <button type="submit">Update My Plan</button>
-        </form>
-    </div>
-
-    <a href="/">← Generate Another Plan</a>
 
 </body>
 </html>
