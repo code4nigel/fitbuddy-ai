@@ -1,14 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Plan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Workout Plan - FitBuddy</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .plan-box { background-color: #f4f4f9; padding: 20px; border-radius: 8px; white-space: pre-wrap; border: 1px solid #ddd; }
+        .tip-box { background-color: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 5px solid #2196F3;}
+        .feedback-box { background-color: #fff3e0; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #ffe0b2;}
+        textarea { width: 100%; padding: 10px; margin-top: 10px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #45a049; }
+        a { display: inline-block; margin-top: 20px; text-decoration: none; color: #2196F3; font-weight: bold; }
+    </style>
 </head>
 <body>
+
     <h1>Your 7-Day Workout Plan 💪</h1>
 
-    <pre>{{ plan }}</pre>
+    <div class="plan-box">{{ plan }}</div>
 
-    <br>
-    <a href="/">Generate Another Plan</a>
+    <div class="tip-box">
+        <h3>💡 Daily Nutrition Tip:</h3>
+        <p>{{ nutrition_tip }}</p>
+    </div>
+
+    <div class="feedback-box">
+        <h3>🔄 Refine Your Plan</h3>
+        <p>Is this plan too hard? Too easy? Need to avoid a knee injury? Tell the AI to adjust it!</p>
+        <!-- Action updated to /submit-feedback -->
+        <form action="/submit-feedback" method="post">
+            <input type="hidden" name="plan_id" value="{{ plan_id }}">
+            <textarea name="feedback" rows="3" placeholder="e.g., Make it easier, I only have 20 minutes a day..."></textarea>
+            <button type="submit">Update My Plan</button>
+        </form>
+    </div>
+
+    <a href="/">← Generate Another Plan</a>
+
 </body>
 </html>

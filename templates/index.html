@@ -6,8 +6,11 @@
 <body>
     <h1>FitBuddy 💪</h1>
 
-    <form action="/generate" method="post">
-        <input type="text" name="name" placeholder="Name" required><br>
+    <!-- Action updated to /generate-workout -->
+    <form action="/generate-workout" method="post">
+        <!-- Inputs updated to match username and user_id -->
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="text" name="user_id" placeholder="User ID (e.g. Student123)" required><br>
         <input type="number" name="age" placeholder="Age" required><br>
         <input type="number" name="weight" placeholder="Weight" required><br>
 
