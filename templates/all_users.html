@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Admin - All Users</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        body { font-family: Arial, sans-serif; max-width: 95%; margin: 0 auto; padding: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
         th { background-color: #f4f4f9; }
+        .plan-preview { max-height: 150px; overflow-y: auto; white-space: pre-wrap; font-size: 0.9em; background: #f9f9f9; padding: 5px; }
     </style>
 </head>
 <body>
@@ -16,23 +17,34 @@
     
     <table>
         <tr>
-            <th>DB ID</th>
             <th>Username</th>
             <th>User ID</th>
-            <th>Age</th>
-            <th>Weight</th>
-            <th>Goal</th>
-            <th>Intensity</th>
+            <th>Age / Weight</th>
+            <th>Goal / Intensity</th>
+            <th>Original Plan</th>
+            <th>Updated Plan (Feedback)</th>
         </tr>
         {% for user in users %}
         <tr>
-            <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.user_id }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.weight }}</td>
-            <td>{{ user.goal }}</td>
-            <td>{{ user.intensity }}</td>
+            <td>{{ user.age }} yrs, {{ user.weight }}</td>
+            <td>{{ user.goal }}<br><i>({{ user.intensity }})</i></td>
+            
+            <!-- We loop through the plans to match the correct one to the user -->
+            {% for plan in plans %}
+                {% if plan.user_id == user.id %}
+                    <td><div class="plan-preview">{{ plan.original_plan }}</div></td>
+                    <td>
+                        {% if plan.updated_plan %}
+                            <div class="plan-preview">{{ plan.updated_plan }}</div>
+                        {% else %}
+                            <i>No feedback submitted yet.</i>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+            
         </tr>
         {% endfor %}
     </table>
