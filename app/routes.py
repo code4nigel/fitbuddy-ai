@@ -50,7 +50,6 @@ def generate_plan(
     finally:
         db.close()
 
-    # 🔥 UPDATED: Passing username, goal, intensity, and changing plan to workout_plan
     return templates.TemplateResponse(
         "result.html",
         {
@@ -78,7 +77,6 @@ def submit_feedback(
         if not db_plan:
             return HTMLResponse("Plan not found", status_code=404)
 
-        # Fetch the user to display their details on the updated page
         user = db.query(User).filter(User.id == db_plan.user_id).first()
 
         updated_plan_text = update_workout_plan(db_plan.original_plan, feedback_data.feedback)
@@ -88,7 +86,6 @@ def submit_feedback(
     finally:
         db.close()
 
-    # 🔥 UPDATED: Passing the user data and workout_plan back to the template
     return templates.TemplateResponse(
         "result.html",
         {
@@ -98,7 +95,9 @@ def submit_feedback(
             "intensity": user.intensity,
             "workout_plan": updated_plan_text, 
             "nutrition_tip": nutrition_tip, 
-            "plan_id": feedback_data.plan_id
+            "plan_id": feedback_data.plan_id,
+            # 🔥 NEW: Added the required confirmation message!
+            "success_message": "✅ Success! Your plan has been dynamically updated based on your feedback." 
         }
     )
 

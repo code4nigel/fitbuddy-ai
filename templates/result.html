@@ -31,7 +31,18 @@
         h1 { color: #ff5722; text-align: center; }
         h3 { color: #ffffff; margin-bottom: 10px; }
 
-        /* 🔥 NEW: User Info Banner styling */
+        /* 🔥 NEW: Success Banner Styling */
+        .success-banner {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
         .user-info {
             background: #252525;
             padding: 15px;
@@ -107,16 +118,22 @@
 <body>
 
     <div class="container">
+        
+        <!-- 🔥 NEW: Success confirmation message block -->
+        {% if success_message %}
+            <div class="success-banner">
+                {{ success_message }}
+            </div>
+        {% endif %}
+
         <h1>Your Personalized Plan ⚡</h1>
 
-        <!-- 🔥 NEW: Binding the user data variables to the template -->
         <div class="user-info">
             <span>Client: <strong>{{ username }}</strong></span>
             <span>Goal: <strong>{{ goal|title }}</strong></span>
             <span>Intensity: <strong>{{ intensity|title }}</strong></span>
         </div>
 
-        <!-- 🔥 UPDATED: Using workout_plan instead of plan -->
         <div class="plan-box">{{ workout_plan }}</div>
 
         <div class="tip-box">
