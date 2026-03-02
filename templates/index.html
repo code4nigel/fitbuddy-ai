@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FitBuddy</title>
+</head>
+<body>
+    <h1>FitBuddy 💪</h1>
+
+    <form action="/generate" method="post">
+        <input type="text" name="name" placeholder="Name" required><br>
+        <input type="number" name="age" placeholder="Age" required><br>
+        <input type="number" name="weight" placeholder="Weight" required><br>
+
+        <select name="goal" required>
+            <option value="weight loss">Weight Loss</option>
+            <option value="muscle gain">Muscle Gain</option>
+            <option value="general wellness">General Wellness</option>
+        </select><br>
+
+        <select name="intensity" required>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select><br>
+
+        <button type="submit">Generate Plan</button>
+    </form>
+</body>
+</html>
