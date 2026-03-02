@@ -28,32 +28,33 @@ def generate_plan(
     # 🔥 1️⃣ Generate plan using Gemini
     plan = generate_workout_plan(name, age, weight, goal, intensity)
 
-    # 🔥 2️⃣ Save to database
+    # 🔥 2️⃣ Save to database safely
     db = SessionLocal()
+    try:
+        # Save user
+        new_user = User(
+            name=name,
+            age=age,
+            weight=weight,
+            goal=goal,
+            intensity=intensity
+        )
 
-    # Save user
-    new_user = User(
-        name=name,
-        age=age,
-        weight=weight,
-        goal=goal,
-        intensity=intensity
-    )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+        # Save workout plan
+        new_plan = WorkoutPlan(
+            user_id=new_user.id,
+            original_plan=plan
+        )
 
-    # Save workout plan
-    new_plan = WorkoutPlan(
-        user_id=new_user.id,
-        original_plan=plan
-    )
-
-    db.add(new_plan)
-    db.commit()
-
-    db.close()
+        db.add(new_plan)
+        db.commit()
+    finally:
+        # This guarantees the connection closes, even if it crashes above!
+        db.close()
 
     # 🔥 3️⃣ Return result page
     return templates.TemplateResponse(

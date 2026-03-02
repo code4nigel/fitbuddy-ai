@@ -1,35 +1,19 @@
-import os
-from dotenv import load_dotenv
 from google import genai
+from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
 client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    http_options={"api_version": "v1"}  
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
-def generate_workout_plan(name, age, weight, goal, intensity):
-
-    prompt = f"""
-    Create a structured 7-day workout plan.
-
-    Name: {name}
-    Age: {age}
-    Weight: {weight}
-    Fitness Goal: {goal}
-    Preferred Intensity: {intensity}
-
-    Format:
-    Day 1:
-    Warm-up:
-    Main workout:
-    Cooldown:
-    """
-
+def generate_workout_plan(name, age, weight, goal, intensity): 
+    # Combine the variables into a prompt for Gemini
+    prompt = f"Act as an expert personal trainer. Create a detailed, {intensity} workout plan for {name}. They are {age} years old, weigh {weight}kg/lbs, and their primary goal is: {goal}."
+    
     response = client.models.generate_content(
-        model="gemini-1.5-flash-latest",
+        model="gemini-2.5-flash", 
         contents=prompt
     )
-
     return response.text
