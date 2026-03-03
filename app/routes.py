@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+import time
 
 from app.database import SessionLocal, User, WorkoutPlan, save_user, save_plan, update_plan, get_all_users, get_all_plans
 from app.gemini_generator import generate_workout_gemini, generate_nutrition_tip_with_flash, update_workout_plan
@@ -40,7 +41,13 @@ def generate_plan(
         weight=weight, goal=goal, intensity=intensity
     )
 
+    # 1. Generate Workout Plan
     plan = generate_workout_gemini(user_data.username, user_data.age, user_data.weight, user_data.goal, user_data.intensity)
+    
+    # Pause for 2 seconds to avoid Google Free Tier spam blockers
+    time.sleep(2) 
+
+    # 2. Generate Nutrition Tip
     nutrition_tip = generate_nutrition_tip_with_flash(user_data.goal)
 
     db = SessionLocal()
@@ -83,20 +90,25 @@ def submit_feedback(
         update_plan(db, feedback_data.plan_id, updated_plan_text)
         
         nutrition_tip = db_plan.nutrition_tip
+        
+        # 🔥 FIX: We must extract these attributes BEFORE the db.close() runs!
+        safe_username = user.username
+        safe_goal = user.goal
+        safe_intensity = user.intensity
+        
     finally:
-        db.close()
+        db.close() # The database connection is closed here
 
     return templates.TemplateResponse(
         "result.html",
         {
             "request": request, 
-            "username": user.username,
-            "goal": user.goal,
-            "intensity": user.intensity,
+            "username": safe_username,    # Using the safe, extracted variables
+            "goal": safe_goal,            # instead of the disconnected "user" object
+            "intensity": safe_intensity,
             "workout_plan": updated_plan_text, 
             "nutrition_tip": nutrition_tip, 
             "plan_id": feedback_data.plan_id,
-            # 🔥 NEW: Added the required confirmation message!
             "success_message": "✅ Success! Your plan has been dynamically updated based on your feedback." 
         }
     )

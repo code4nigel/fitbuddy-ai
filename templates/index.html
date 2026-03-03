@@ -16,6 +16,7 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
+            flex-direction: column; /* Changed to column to stack the link below */
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -34,7 +35,7 @@
 
         h1 {
             text-align: center;
-            color: #ff5722; /* Vibrant fitness orange */
+            color: #ff5722;
             margin-bottom: 30px;
             font-weight: 700;
         }
@@ -89,6 +90,25 @@
             transform: translateY(-2px);
         }
 
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 🔥 NEW: Admin Link Styling */
+        .admin-link {
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .admin-link:hover {
+            color: #ff5722;
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 600px) {
             .container { padding: 25px; }
@@ -100,7 +120,8 @@
 
     <div class="container">
         <h1>FitBuddy 💪</h1>
-        <form action="/generate-workout" method="post">
+        
+        <form action="/generate-workout" method="post" onsubmit="document.getElementById('submitBtn').disabled = true; document.getElementById('submitBtn').innerText = 'Generating AI Plan (Please Wait)...';">
             
             <div class="form-group">
                 <label for="username">Username</label>
@@ -142,9 +163,12 @@
                 </select>
             </div>
 
-            <button type="submit">Generate My AI Plan</button>
+            <button type="submit" id="submitBtn">Generate My AI Plan</button>
         </form>
     </div>
+
+    <!-- 🔥 NEW: Admin Dashboard Link -->
+    <a href="/view-all-users" class="admin-link">🔒 Admin Access</a>
 
 </body>
 </html>
